@@ -1,17 +1,15 @@
 package com.lomaevaav.oop.at;
-import com.lomaevaav.oop.at.base.BaseTest;
+import com.lomaevaav.oop.at.base.BaseWebTest;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
-import  java.util.Arrays;
 
 import static java.lang.Thread.sleep;
 
-public class NavigationTest extends BaseTest {
+public class NavigationWebTest extends BaseWebTest {
    /* Перейти на сайт https://geekbrains.ru/courses
     Нажать на кнопку Курсы
     Проверить что страница Курсы открылась
@@ -34,7 +32,7 @@ public class NavigationTest extends BaseTest {
 
         }
 
-        @Test
+      /*  @Test
         public void topics() {
             chromeDriver.findElement(By.cssSelector("[id=\"nav\"] [href=\"/topics\"]")).click();
             Assertions.assertEquals(
@@ -86,6 +84,21 @@ public class NavigationTest extends BaseTest {
                 chromeDriver.findElement(By.cssSelector("[id=\"top-menu\"] h2")).getText()
         );
 
-    }
+    }*/
+    @CsvSource({
+            "topics, Форум",
+            "events,Вебинары",
+            "tests,Тесты",
+            "career, Карьера"
+    })
+    @ParameterizedTest
+    public void paramNav(String a, String b) {
 
+        chromeDriver.findElement(By.cssSelector("[id=\"nav\"] [href=\"/"+a+"\"]")).click();
+        Assertions.assertEquals(
+                b,
+                chromeDriver.findElement(By.cssSelector("[id=\"top-menu\"] h2")).getText()
+        );
+
+    }
 }
