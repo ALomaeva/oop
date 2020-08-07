@@ -1,15 +1,21 @@
 package com.lomaevaav.oop.at;
+import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import com.lomaevaav.oop.at.base.BaseTest;
+import com.lomaevaav.oop.at.base.BaseWebTest;
+import static org.hamcrest.Matchers.*;
 
 import java.util.List;
 
+import static org.hamcrest.number.OrderingComparison.lessThanOrEqualTo;
 
-public class SearchTest extends BaseTest {
+
+public class SearchWebTest extends BaseWebTest {
      /* Перейти на сайт https://geekbrains.ru/courses
 Нажать на кнопку Поиск
 В поле Поиск ввести текст: java
@@ -56,17 +62,23 @@ public class SearchTest extends BaseTest {
          wait15second.until(ExpectedConditions.textToBePresentInElement(tests, "Тесты"));
          wait15second.until(ExpectedConditions.textToBePresentInElement(projectAndCompany, "Проекты и компании"));
 
-         Assertions.assertTrue((Integer.parseInt(professionsCount.getText())) >= 2, "Количество найденных профессий менее 2!");
-         Assertions.assertTrue((Integer.parseInt(coursesCount.getText())) > 15, "Количество найденных курсов <= 15!");
-         Assertions.assertTrue((Integer.parseInt(eventsCount.getText()) > 180) & (Integer.parseInt(eventsCount.getText()) < 300),
-                 "Количество найденных вебинаров не в диапазоне (180; 300)");
-         Assertions.assertTrue((Integer.parseInt(blogsCount.getText())) > 300, "Количество найденных блогов менее 300!");
-         Assertions.assertTrue((Integer.parseInt(forumsCount.getText())) != 350, "Количество найденных форумов равно 350!");
-         Assertions.assertTrue((Integer.parseInt(testsCount.getText())) != 0, "Количество найденных тестов равно 0!");
-
-         Assertions.assertEquals("Java Junior. Что нужно знать для успешного собеседования?", eventsList.get(0).getText());
-
-         Assertions.assertNotNull(gbCompany, "В Проектах и компаниях не отображается GeekBrains");
+        // Assertions.assertTrue((Integer.parseInt(professionsCount.getText())) >= 2, "Количество найденных профессий менее 2!");
+         MatcherAssert.assertThat(Integer.parseInt(professionsCount.getText()), greaterThanOrEqualTo(2));
+         //Assertions.assertTrue((Integer.parseInt(coursesCount.getText())) > 15, "Количество найденных курсов <= 15!");
+         MatcherAssert.assertThat(Integer.parseInt(coursesCount.getText()), greaterThan(15));
+         //Assertions.assertTrue((Integer.parseInt(eventsCount.getText()) > 180) & (Integer.parseInt(eventsCount.getText()) < 300),
+         //        "Количество найденных вебинаров не в диапазоне (180; 300)");
+         MatcherAssert.assertThat(Integer.parseInt(eventsCount.getText()), allOf(greaterThan(180), lessThan(300)));
+         //Assertions.assertTrue((Integer.parseInt(blogsCount.getText())) > 300, "Количество найденных блогов менее 300!");
+         MatcherAssert.assertThat(Integer.parseInt(blogsCount.getText()), greaterThan(300));
+         //Assertions.assertTrue((Integer.parseInt(forumsCount.getText())) != 350, "Количество найденных форумов равно 350!");
+         MatcherAssert.assertThat(Integer.parseInt(forumsCount.getText()), not(Matchers.equalTo(350)));
+         //Assertions.assertTrue((Integer.parseInt(testsCount.getText())) != 0, "Количество найденных тестов равно 0!");
+         MatcherAssert.assertThat(Integer.parseInt(testsCount.getText()), not(Matchers.equalTo(0)));
+         //Assertions.assertEquals("Java Junior. Что нужно знать для успешного собеседования?", eventsList.get(0).getText());
+         MatcherAssert.assertThat(eventsList.get(0).getText(), equalTo("Java Junior. Что нужно знать для успешного собеседования?"));
+         //Assertions.assertNotNull(gbCompany, "В Проектах и компаниях не отображается GeekBrains");
+         MatcherAssert.assertThat (gbCompany, notNullValue());
 
      }
 }
